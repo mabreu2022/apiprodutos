@@ -1,0 +1,53 @@
+unit Services.Usuario;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Providers.Cadastro, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf,
+  FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys,
+  FireDAC.Phys.PG, FireDAC.Phys.PGDef, FireDAC.ConsoleUI.Wait,
+  FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, Data.DB,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TServiceUsuario = class(TProviderCadastro)
+    qryPesquisaid: TLargeintField;
+    qryPesquisanome: TWideStringField;
+    qryPesquisalogin: TWideStringField;
+    qryPesquisastatus: TSmallintField;
+    qryPesquisasexo: TSmallintField;
+    qryPesquisatelefone: TWideStringField;
+    qryCadastroid: TLargeintField;
+    qryCadastronome: TWideStringField;
+    qryCadastrologin: TWideStringField;
+    qryCadastrosenha: TWideStringField;
+    qryCadastrostatus: TSmallintField;
+    qryCadastrosexo: TSmallintField;
+    qryCadastrotelefone: TWideStringField;
+    qryCadastrofoto: TBlobField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function GetById(const AId: string) : TFDquery; override;
+  end;
+
+var
+  ServiceUsuario: TServiceUsuario;
+
+implementation
+
+{%CLASSGROUP 'System.Classes.TPersistent'}
+
+{$R *.dfm}
+
+{ TServiceUsuario }
+
+function TServiceUsuario.GetById(const AId: string): TFDquery;
+begin
+  Result := inherited GetById(AId);
+  qryCadastrosenha.Visible:= False;
+end;
+
+end.

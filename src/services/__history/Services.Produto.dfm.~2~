@@ -1,0 +1,3 @@
+inherited ServiceProduto: TServiceProduto
+  PixelsPerInch = 120
+end

@@ -1,0 +1,3 @@
+inherited ProviderCadastro: TProviderCadastro
+  PixelsPerInch = 120
+end

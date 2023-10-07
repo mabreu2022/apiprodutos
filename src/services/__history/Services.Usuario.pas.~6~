@@ -1,0 +1,97 @@
+unit Services.Usuario;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, Providers.Cadastro, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf,
+  FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys,
+  FireDAC.Phys.PG, FireDAC.Phys.PGDef, FireDAC.ConsoleUI.Wait,
+  FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, Data.DB,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, System.JSON,
+  System.Generics.Collections;
+
+type
+  TServiceUsuario = class(TProviderCadastro)
+    qryPesquisaid: TLargeintField;
+    qryPesquisanome: TWideStringField;
+    qryPesquisalogin: TWideStringField;
+    qryPesquisastatus: TSmallintField;
+    qryPesquisasexo: TSmallintField;
+    qryPesquisatelefone: TWideStringField;
+    qryCadastroid: TLargeintField;
+    qryCadastronome: TWideStringField;
+    qryCadastrologin: TWideStringField;
+    qryCadastrosenha: TWideStringField;
+    qryCadastrostatus: TSmallintField;
+    qryCadastrosexo: TSmallintField;
+    qryCadastrotelefone: TWideStringField;
+    qryCadastrofoto: TBlobField;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function GetById(const AId: string) : TFDquery; override;
+    function Append(const AJson: TJSONObject) : Boolean; override;
+    function Update(const AJson: TJSONObject) : Boolean; override;
+    function ListAll(const AParams: TDictionary<string, string>) : TFDquery; override;
+  end;
+
+var
+  ServiceUsuario: TServiceUsuario;
+
+implementation
+
+{%CLASSGROUP 'System.Classes.TPersistent'}
+
+{$R *.dfm}
+
+{ TServiceUsuario }
+
+function TServiceUsuario.Append(const AJson: TJSONObject): Boolean;
+begin
+  Result := inherited Append(AJson);
+  qryCadastrosenha.Visible:= False;
+end;
+
+function TServiceUsuario.GetById(const AId: string): TFDquery;
+begin
+  Result := inherited GetById(AId);
+  qryCadastrosenha.Visible:= False;
+end;
+
+function TServiceUsuario.ListAll(
+  const AParams: TDictionary<string, string>): TFDquery;
+begin
+  if AParams.ContainsKey('id') then
+  begin
+    qryPesquisa.SQL.Add('and id = :id');
+    qryPesquisa.ParamByName('id').AsLargeInt := AParams.Items['id'].ToInt64;
+    qryRecordCount.SQL.Add('and id = :id');
+    qryRecordCount.ParamByName('id').AsLargeInt := AParams.Items['id'].ToInt64;
+  end;
+  if AParams.ContainsKey('nome') then
+  begin
+    qryPesquisa.SQL.Add('and lower(nome) like :nome');
+    qryPesquisa.ParamByName('nome').AsString := '%' + AParams.Items['nome'].ToLower + '%';
+    qryRecordCount.SQL.Add('and lower(nome) like :nome');
+    qryRecordCount.ParamByName('nome').AsString := qryPesquisa.ParamByName('nome').AsString;
+  end;
+  if AParams.ContainsKey('login') then
+  begin
+    qryPesquisa.SQL.Add('and login = :login');
+    qryPesquisa.ParamByName('login').AsSmallInt := AParams.Items['login'].ToInteger();
+    qryRecordCount.SQL.Add('and login = :login');
+    qryRecordCount.ParamByName('login').AsSmallInt := AParams.Items['login'].ToInteger();
+  end;
+  qryPesquisa.SQL.Add('order by u.id');
+  Result := inherited ListAll(AParams);
+end;
+
+function TServiceUsuario.Update(const AJson: TJSONObject): Boolean;
+begin
+  qryCadastrosenha.Visible:= True;
+  Result := inherited Update(AJson);
+end;
+
+end.

@@ -1,0 +1,50 @@
+unit Controllers.Usuario;
+
+interface
+
+procedure Registry;
+
+implementation
+
+uses
+  Horse, Services.Usuario, System.JSON, DataSet.Serialize;
+
+procedure ListarUsuarios(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+var
+  LRetorno: TJSONObject;
+  LService: TServiceUsuario;
+begin
+  LService := TServiceUsuario.Create;
+  try
+    LRetorno := TJSONObject.Create;
+    LRetorno.AddPair('data', LService.ListAll(Req.Query.Dictionary).ToJSONArray());
+    LRetorno.AddPair('records', TJSONNumber.Create(LService.GetRecordCount));
+    Res.Send(LRetorno);
+  finally
+    LService.Free;
+  end;
+end;
+
+procedure ObterUsuario(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+var
+  LIdUsuario: string;
+  LService: TServiceUsuario;
+begin
+  LService := TServiceUsuario.Create;
+  try
+    LIdUsuario := Req.Params.Items['id'];
+    if LService.GetById(LIdUsuario).IsEmpty then
+     raise EHorseException.New.Error('Usuário não cadastrado');
+    Res.Send(LService.qryCadastro.ToJSONObject());
+  finally
+    LService.Free;
+  end;
+end;
+
+procedure Registry;
+begin
+   THorse.Get('/usuarios', ListarUsuarios);
+   THorse.Get('/usuarios/:id', ObterUsuario);
+end;
+
+end.

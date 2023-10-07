@@ -1,0 +1,95 @@
+unit Providers.Cadastro;
+
+interface
+
+uses
+  System.SysUtils,
+  System.Classes,
+  Providers.Connection,
+  FireDAC.Stan.Intf,
+  FireDAC.Stan.Option,
+  FireDAC.Stan.Error,
+  FireDAC.UI.Intf,
+  FireDAC.Phys.Intf,
+  FireDAC.Stan.Def,
+  FireDAC.Stan.Pool,
+  FireDAC.Stan.Async,
+  FireDAC.Phys,
+  FireDAC.Phys.PG,
+  FireDAC.Phys.PGDef,
+  FireDAC.ConsoleUI.Wait,
+  Data.DB,
+  FireDAC.Comp.Client,
+  FireDAC.Stan.Param,
+  FireDAC.DatS,
+  FireDAC.DApt.Intf,
+  FireDAC.DApt,
+  FireDAC.Comp.DataSet,
+  System.JSON,
+  System.Generics.Collections, FireDAC.VCLUI.Wait;
+
+type
+  TProviderCadastro = class(TProviderConnection)
+    qryPesquisa: TFDQuery;
+    qryRecordCount: TFDQuery;
+    qryCadastro: TFDQuery;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    function Append(const AJson: TJSONObject) : Boolean; virtual;
+    function Update(const AJson: TJSONObject) : Boolean; virtual;
+    function Delete: Boolean; virtual;
+    function ListAll(const AParams: TDictionary<string, string>) : TFDquery; virtual;
+    function GetById(const AId: string) : TFDquery; virtual;
+    function GetRecordCount: Int64; virtual;
+  end;
+
+var
+  ProviderCadastro: TProviderCadastro;
+
+implementation
+
+uses
+  DataSet.Serialize;
+
+{%CLASSGROUP 'System.Classes.TPersistent'}
+
+{$R *.dfm}
+
+{ TProviderCadastro }
+
+function TProviderCadastro.Append(const AJson: TJSONObject): Boolean;
+begin
+  qryCadastro.SQL.Add('where 1<>1');
+  qryCadastro.Open();
+  qryCadastro.LoadFromJSON(AJson, False);
+end;
+
+function TProviderCadastro.Delete: Boolean;
+begin
+
+end;
+
+function TProviderCadastro.GetById(const AId: string): TFDquery;
+begin
+
+end;
+
+function TProviderCadastro.GetRecordCount: Int64;
+begin
+
+end;
+
+function TProviderCadastro.ListAll(
+  const AParams: TDictionary<string, string>): TFDquery;
+begin
+
+end;
+
+function TProviderCadastro.Update(const AJson: TJSONObject): Boolean;
+begin
+
+end;
+
+end.

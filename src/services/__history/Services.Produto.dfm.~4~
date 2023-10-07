@@ -1,0 +1,14 @@
+inherited ServiceProduto: TServiceProduto
+  Height = 268
+  Width = 642
+  PixelsPerInch = 120
+  inherited FDConnection: TFDConnection
+    Connected = True
+  end
+  inherited qryPesquisa: TFDQuery
+    SQL.Strings = (
+      'select p.id,p.nome,p.valor,p.status,p.estoque'
+      'from produto p'
+      'where 1 = 1')
+  end
+end

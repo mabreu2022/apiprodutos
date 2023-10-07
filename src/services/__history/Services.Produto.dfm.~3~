@@ -1,0 +1,5 @@
+inherited ServiceProduto: TServiceProduto
+  Height = 268
+  Width = 642
+  PixelsPerInch = 120
+end

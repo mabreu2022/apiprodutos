@@ -1,0 +1,17 @@
+object ProviderConnection: TProviderConnection
+  Height = 277
+  Width = 327
+  PixelsPerInch = 120
+  object FDConnection: TFDConnection
+    Params.Strings = (
+      'ConnectionDef=Curso_Pooled')
+    LoginPrompt = False
+    Left = 56
+    Top = 32
+  end
+  object FDPhysPgDriverLink: TFDPhysPgDriverLink
+    VendorHome = 'C:\Fontes\ApiEcommerce\Business\'
+    Left = 208
+    Top = 32
+  end
+end

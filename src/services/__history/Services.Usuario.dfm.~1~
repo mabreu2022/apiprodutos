@@ -1,0 +1,3 @@
+inherited ServiceUsuario: TServiceUsuario
+  PixelsPerInch = 120
+end

@@ -1,0 +1,19 @@
+inherited ProviderCadastro: TProviderCadastro
+  Width = 910
+  PixelsPerInch = 120
+  object qryPesquisa: TFDQuery
+    Connection = FDConnection
+    Left = 464
+    Top = 32
+  end
+  object qryRecordCount: TFDQuery
+    Connection = FDConnection
+    Left = 344
+    Top = 32
+  end
+  object qryCadastro: TFDQuery
+    Connection = FDConnection
+    Left = 216
+    Top = 32
+  end
+end

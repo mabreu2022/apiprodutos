@@ -1,0 +1,11 @@
+object ProviderConnection: TProviderConnection
+  Height = 277
+  Width = 411
+  PixelsPerInch = 120
+  object FDConnection: TFDConnection
+    Params.Strings = (
+      'ConnectionDef=Curso_Pooled')
+    Left = 56
+    Top = 32
+  end
+end
