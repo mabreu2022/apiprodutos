@@ -7,7 +7,7 @@ procedure Registry;
 implementation
 
 uses
-  Horse, Services.Usuario, System.JSON, DataSet.Serialize, Data.DB;
+  Horse, Services.Usuario, System.JSON, DataSet.Serialize, Data.DB, System.Classes;
 
 procedure ListarUsuarios(Req: THorseRequest; Res: THorseResponse; Next: TProc);
 var
@@ -85,8 +85,50 @@ begin
     LIdUsuario := Req.Params.Items['id'];
     if LService.GetById(LIdUsuario).IsEmpty then
       raise EHorseException.New.Error('Usuário não cadastrado');
+     // raise EHorseException.Create.Status(THTTPStatus.BadRequest).Error('Foto inválida');
     if LService.Delete then
       Res.Status(THTTPStatus.NoContent);
+  finally
+    LService.Free;
+  end;
+end;
+
+procedure CadastrarFotoUsuario(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+var
+  LFoto: TMemoryStream;
+  LService: TServiceUsuario;
+  LIdUsuario: string;
+begin
+  LService := TServiceUsuario.Create;
+  try
+    LIdUsuario := Req.Params.Items['id'];
+    if LService.GetById(LIdUsuario).IsEmpty then
+      raise EHorseException.New.Error('Usuário não cadastrado');
+    LFoto := Req.Body<TMemoryStream>;
+    if not Assigned(LFoto) then
+      raise EHorseException.Create.Status(THTTPStatus.BadRequest).Error('Foto inválida');
+    if LService.SalvarFotoUsuario(LFoto) then
+      Res.Status(THTTPStatus.NoContent);
+  finally
+    LService.Free;
+  end;
+end;
+
+procedure ObterFotoUsuario(Req: THorseRequest; Res: THorseResponse; Next: TProc);
+var
+  LFoto: TStream;
+  LService: TServiceUsuario;
+  LIdUsuario: string;
+begin
+  LService := TServiceUsuario.Create;
+  try
+    LIdUsuario := Req.Params.Items['id'];
+    if LService.GetById(LIdUsuario).IsEmpty then
+      raise EHorseException.Create.Status(THTTPStatus.NotFound).Error('Usuário não cadastrado');
+    LFoto := LService.ObterFotoUsuario;
+    if not Assigned(LFoto) then
+      raise EHorseException.Create.Status(THTTPStatus.NotFound).Error('Foto não cadastrada');
+    Res.Send(LFoto);
   finally
     LService.Free;
   end;
@@ -99,6 +141,8 @@ begin
    THorse.Post('/usuarios', CadastrarUsuario);
    THorse.Put('/usuarios/:id', AlterarUsuario);
    THorse.Delete('/usuarios/:id', DeletarUsuario);
+   THorse.Post('/usuarios/:id/foto', CadastrarFotoUsuario);
+   THorse.Get('/usuarios/:id/foto', ObterFotoUsuario);
 end;
 
 end.

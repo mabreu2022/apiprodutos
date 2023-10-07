@@ -53,6 +53,8 @@ type
     function Append(const AJson: TJSONObject) : Boolean; override;
     function Update(const AJson: TJSONObject) : Boolean; override;
     function ListAll(const AParams: TDictionary<string, string>) : TFDquery; override;
+    function SalvarFotoUsuario(const AFoto: TStream): Boolean;
+    function ObterFotoUsuario : TStream;
   end;
 
 var
@@ -109,11 +111,28 @@ begin
   Result := inherited ListAll(AParams);
 end;
 
+function TServiceUsuario.ObterFotoUsuario: TStream;
+begin
+  Result := Nil;
+  if qryCadastrofoto.IsNull then
+    Exit;
+  Result := TMemoryStream.Create;
+  qryCadastrofoto.SaveToStream(Result);
+end;
+
 procedure TServiceUsuario.qryCadastroBeforePost(DataSet: TDataSet);
 begin
   inherited;
   if (qryCadastrosenha.OldValue <> qryCadastrosenha.NewValue) and (not qryCadastrosenha.AsString.Trim.IsEmpty) then
     qryCadastrosenha.AsString := TBcrypt.GenerateHash(qryCadastrosenha.AsString);
+end;
+
+function TServiceUsuario.SalvarFotoUsuario(const AFoto: TStream): Boolean;
+begin
+  qryCadastro.Edit;
+  qryCadastrofoto.LoadFromStream(AFoto);
+  qryCadastro.Post;
+  Result := qryCadastro.ApplyUpdates(0) = 0;
 end;
 
 function TServiceUsuario.Update(const AJson: TJSONObject): Boolean;

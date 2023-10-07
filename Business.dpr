@@ -8,6 +8,7 @@ uses
   Horse,
   Horse.Jhonson,
   Horse.HandleException,
+  Horse.OctetStream,
   Providers.Connection in 'src\providers\Providers.Connection.pas' {ProviderConnection: TDataModule},
   Providers.Cadastro in 'src\providers\Providers.Cadastro.pas' {ProviderCadastro: TDataModule},
   Services.Produto in 'src\services\Services.Produto.pas' {ServiceProduto: TDataModule},
@@ -24,7 +25,8 @@ uses
 begin
   THorse
    .Use(Jhonson())
-   .Use(HandleException);
+   .Use(HandleException)
+   .Use(OctetStream);
 
   Controllers.Produto.Registry;
   Controllers.Cliente.Registry;

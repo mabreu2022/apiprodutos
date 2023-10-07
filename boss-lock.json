@@ -16,12 +16,20 @@
 			"hash": "6408c0964998a945994d4bf29d2c88c5",
 			"artifacts": {},
 			"failed": false,
-			"changed": true
+			"changed": false
 		},
 		"https://github.com/hashload/handle-exception": {
 			"name": "handle-exception",
 			"version": "0.1.8",
 			"hash": "362736186bc6293dd9a716d7f7413455",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
+		"https://github.com/hashload/horse-octet-stream": {
+			"name": "horse-octet-stream",
+			"version": "1.9.9",
+			"hash": "c7b52b334f166edea1313c94b2ac170c",
 			"artifacts": {},
 			"failed": false,
 			"changed": false
